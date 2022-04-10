@@ -1,5 +1,8 @@
+using Microsoft.OpenApi.Models;
+using Ordering.Api.Extensions;
 using Ordering.Core;
 using Ordering.Infrastructure;
+using Ordering.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +12,25 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My Playground - Order HTTP API",
+        Version = "v1",
+        Description = "The Order Microservice HTTP API. This is a CQRS-Clean Architecture microservice sample"
+    });
+});
 
 var app = builder.Build();
+
+app.MigrateDatabase<OrderContext>((context, services) =>
+{
+    OrderContextSeed
+        .SeedAsync(context)
+        .Wait();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

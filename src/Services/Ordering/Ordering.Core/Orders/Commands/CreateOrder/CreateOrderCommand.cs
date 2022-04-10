@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using MediatR;
 using Ordering.Core.Entities;
 
@@ -7,20 +8,18 @@ namespace Ordering.Core.Orders.Commands.CreateOrder;
 public class CreateOrderCommand
     : IRequest<int>
 {
-    public int CustomerId { get; }
+    public int? CustomerId { get; }
     public string CustomerName { get; }
+
     private readonly List<OrderItem> _orderItems;
+    
+    [Required]
     public List<OrderItem> OrderItems => _orderItems;
 
-    public CreateOrderCommand()
+    public CreateOrderCommand(int? customerId, string customerName, List<OrderItem> orderItems)
     {
-        _orderItems = new List<OrderItem>();
-    }
-
-    public CreateOrderCommand(List<OrderItem> orderItems, int customerId, string customerName) : this()
-    {
-        _orderItems = orderItems;
         CustomerId = customerId;
         CustomerName = customerName;
+        _orderItems = orderItems;
     }
 }
