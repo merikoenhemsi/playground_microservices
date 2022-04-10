@@ -1,16 +1,24 @@
-﻿namespace Ordering.Core.Entities;
+﻿using Ordering.Core.Enums;
+
+namespace Ordering.Core.Entities;
 
 public class Order:BaseEntity
 {
+    public int CustomerId { get; set; }
+    public string CustomerName { get; set; }
+    public  List<OrderItem> OrderItems;
+    public OrderStatus OrderStatus { get; set; }
 
-    private DateTime _orderDate;
+    public void SetCancelledStatus()
+    {
+        if (OrderStatus == OrderStatus.Paid ||
+            OrderStatus == OrderStatus.Shipped)
+        {
+            throw new Exception("You can't cancel the order");
+        }
 
-    public int? GetBuyerId => _buyerId;
-    private int? _buyerId;
+        OrderStatus = OrderStatus.Cancelled;
+    }
 
-    //public OrderStatus OrderStatus { get; private set; }
-    //private int _orderStatusId;
-
-    private string _description;
 
 }
