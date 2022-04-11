@@ -43,12 +43,17 @@ public class OrderController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CancelOrderAsync(int id)
     {
-        var command = new CancelOrderCommand
-        {
-            Id = id
-        };
+        bool commandResult = false;
 
-        bool commandResult = await _mediator.Send(command);
+        if (id > 0)
+        {
+            var command = new CancelOrderCommand
+            {
+                Id = id
+            };
+
+            commandResult = await _mediator.Send(command);
+        }
 
         if (!commandResult)
         {
