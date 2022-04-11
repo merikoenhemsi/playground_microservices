@@ -11,7 +11,6 @@ public class ProductRepository:IProductRepository
         {
             new Entities.Product
             {
-                Id = 1,
                 Name = "mug",
                 Description = "cool mug",
                 Price = 50
@@ -25,7 +24,6 @@ public class ProductRepository:IProductRepository
         var product = 
             new Entities.Product
             {
-                Id = 1,
                 Name = "mug",
                 Description = "cool mug",
                 Price = 50
@@ -39,7 +37,6 @@ public class ProductRepository:IProductRepository
         {
             new Entities.Product
             {
-                Id = 1,
                 Name = "mug",
                 Description = "cool mug",
                 Price = 50
