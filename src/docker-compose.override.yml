@@ -23,6 +23,12 @@ services:
     ports:
       - "8000:80"
 
+  customer.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8001:80"
+
   ordering.api:
     container_name: ordering.api
     environment:

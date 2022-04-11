@@ -13,6 +13,12 @@ services:
       context: .
       dockerfile: Services/Product/Product.API/Dockerfile
 
+  customer.api:
+    image: ${DOCKER_REGISTRY-}customerapi
+    build:
+      context: .
+      dockerfile: Services/Customer/Customer.API/Dockerfile
+
   ordering.api:
     image: ${DOCKER_REGISTRY-}orderingapi
     build:
