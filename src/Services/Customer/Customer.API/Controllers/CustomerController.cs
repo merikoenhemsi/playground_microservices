@@ -1,6 +1,10 @@
+using AutoMapper;
 using Customer.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Customer.API.Models;
+using EventBus.Messages.Events;
+using MassTransit;
 
 namespace Customer.API.Controllers
 {
@@ -10,11 +14,16 @@ namespace Customer.API.Controllers
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ILogger<CustomerController> _logger;
+        private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger)
+        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger, IMapper mapper,
+            IPublishEndpoint publishEndpoint)
         {
             _customerRepository = customerRepository;
             _logger = logger;
+            _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -51,18 +60,44 @@ namespace Customer.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Entities.Customer), (int)HttpStatusCode.Created)]
-        public async Task<ActionResult<Entities.Customer>> CreateCustomerAsync([FromBody] Entities.Customer customer)
+        [ProducesResponseType(typeof(Entities.Customer), (int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<Entities.Customer>> CreateCustomerAsync([FromBody] CreateCustomerModel customerModel)
         {
-            await _customerRepository.CreateCustomerAsync(customer);
-
-            return CreatedAtRoute("CustomerById", new { id = customer.Id }, customer);
+            try
+            {
+                var customer = await _customerRepository.CreateCustomerAsync(_mapper.Map<Entities.Customer>(customerModel));
+                return CreatedAtRoute("CustomerById", new { id = customer.Id }, customer);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Entities.Customer), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateCustomerAsync([FromBody] Entities.Customer customer)
+        public async Task<ActionResult<Entities.Customer>> UpdateCustomerAsync([FromBody] UpdateCustomerModel updateCustomerModel)
         {
-            return Ok(await _customerRepository.UpdateCustomerAsync(customer));
+            try
+            {
+                var customer = await _customerRepository.GetCustomerAsync(updateCustomerModel.Id);
+                if (customer == null)
+                {
+                    _logger.LogError($"Customer not found.");
+                    return NotFound();
+                }
+
+                var updatedCustomer =
+                    await _customerRepository.UpdateCustomerAsync(_mapper.Map(updateCustomerModel, customer));
+                await _publishEndpoint.Publish(_mapper.Map<UpdateCustomerEvent>(customer));
+                return Ok(updatedCustomer);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]

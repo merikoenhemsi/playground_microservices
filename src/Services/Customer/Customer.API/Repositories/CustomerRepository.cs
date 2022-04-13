@@ -36,9 +36,9 @@ public class CustomerRepository:ICustomerRepository
         return Task.FromResult<Entities.Customer>(customer);
     }
 
-    public Task CreateCustomerAsync(Entities.Customer customer)
+    public Task<Entities.Customer> CreateCustomerAsync(Entities.Customer customer)
     {
-        return Task.FromResult(true);
+        return Task.FromResult<Entities.Customer>(customer);
     }
 
     public Task<bool> UpdateCustomerAsync(Entities.Customer customer)
