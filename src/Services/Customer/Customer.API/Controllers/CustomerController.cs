@@ -77,8 +77,8 @@ namespace Customer.API.Controllers
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(Entities.Customer), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Entities.Customer>> UpdateCustomerAsync([FromBody] UpdateCustomerModel updateCustomerModel)
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<bool>> UpdateCustomerAsync([FromBody] UpdateCustomerModel updateCustomerModel)
         {
             try
             {

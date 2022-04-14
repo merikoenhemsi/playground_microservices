@@ -1,4 +1,6 @@
+using MassTransit;
 using Microsoft.OpenApi.Models;
+using Ordering.Api;
 using Ordering.Api.Extensions;
 using Ordering.Core;
 using Ordering.Infrastructure;
@@ -9,6 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddCoreServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+var eventBusSettings = new EventBusSettings();
+builder.Configuration.Bind(nameof(EventBusSettings), eventBusSettings);
+builder.Services.AddSingleton(eventBusSettings);
+
+builder.Services.AddMassTransit(config => {
+    config.UsingRabbitMq((ctx, cfg) => {
+        cfg.Host(eventBusSettings.HostAddress);
+       // cfg.
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
