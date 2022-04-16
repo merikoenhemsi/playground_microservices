@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Messages", "BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj", "{D12ED0DC-27CC-4351-BF49-32F3C6D6217D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Tests", "Services\Customer\Customer.Tests\Customer.Tests.csproj", "{20672595-79C1-4498-A393-7B7D7B9A0AD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customer.Tests", "Services\Customer\Customer.Tests\Customer.Tests.csproj", "{20672595-79C1-4498-A393-7B7D7B9A0AD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

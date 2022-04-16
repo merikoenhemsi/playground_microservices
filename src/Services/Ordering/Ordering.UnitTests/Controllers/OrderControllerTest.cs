@@ -1,5 +1,4 @@
-﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Ordering.Api.Controllers;
@@ -8,7 +7,7 @@ using Ordering.Core.Orders.Commands.CancelOrder;
 using Ordering.Core.Orders.Commands.CreateOrder;
 using Xunit;
 
-namespace Ordering.UnitTests
+namespace Ordering.UnitTests.Controllers
 {
     public class OrderControllerTest
     {

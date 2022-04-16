@@ -1,5 +1,4 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
 using Customer.API.Controllers;
 using Customer.API.Models;
 using Customer.API.Repositories;
@@ -83,6 +82,17 @@ public class CustomerControllerTest
     }
 
     [Fact]
+    public async void Get_ShouldReturnBadRequest()
+    {
+        var (controller, repository, _, _, _) = Factory();
+        repository.Setup(rp => rp.GetCustomerAsync(It.IsAny<int>()))!.ReturnsAsync(Customers.FirstOrDefault());
+        var actionResult = await controller.CustomerByIdAsync(0);
+
+        actionResult.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
     public async void Post_ShouldReturnCustomer()
     {
         var (controller, repository, _, _, _) = Factory();
@@ -97,7 +107,18 @@ public class CustomerControllerTest
     }
 
     [Fact]
-    public async void Put_ShouldReturnCustomer()
+    public async void Post_ShouldReturnBadRequest()
+    {
+        var (controller, repository, _, _, _) = Factory();
+        repository.Setup(rp => rp.CreateCustomerAsync(It.IsAny<API.Entities.Customer>())).Throws(new Exception("Boom"));
+        var actionResult = await controller.CreateCustomerAsync(new CreateCustomerModel());
+
+        actionResult.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
+    public async void Put_ShouldReturnOk()
     {
         var (controller, repository, _, _, publishEndPoint) = Factory();
         repository.Setup(rp => rp.GetCustomerAsync(It.IsAny<int>()))!.ReturnsAsync(Customers.FirstOrDefault());
@@ -109,7 +130,28 @@ public class CustomerControllerTest
         actionResult.Result.Should().BeOfType<OkObjectResult>();
         var customer = actionResult.GetObjectResult();
         customer.Should().Be(true);
+    }
 
+    [Fact]
+    public async void Put_ShouldReturnBadRequest()
+    {
+        var (controller, repository, _, _, _) = Factory();
+        repository.Setup(rp => rp.GetCustomerAsync(It.IsAny<int>())).Throws(new Exception("Boom"));
+        var actionResult = await controller.UpdateCustomerAsync(new UpdateCustomerModel());
+
+        actionResult.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
+    public async void Delete_ShouldReturnCustomer()
+    {
+        var (controller, repository, _, _, _) = Factory();
+        repository.Setup(rp => rp.DeleteCustomerAsync(It.IsAny<int>())).Returns(Task.FromResult(true));
+        var actionResult = await controller.DeleteCustomerByIdAsync(5);
+
+        actionResult.Should().NotBeNull();
+        actionResult.Should().BeOfType<NoContentResult>();
     }
 
 
