@@ -4,5 +4,5 @@ namespace Ordering.Core.Interfaces;
 
 public interface ICustomerUpdateService
 {
-    void UpdateCustomerNameInOrders(UpdateCustomerModel request);
+    Task UpdateCustomerNameInOrders(UpdateCustomerModel request);
 }

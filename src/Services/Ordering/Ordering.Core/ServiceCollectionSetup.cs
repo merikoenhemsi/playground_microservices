@@ -15,7 +15,7 @@ public static class ServiceCollectionSetup
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddTransient<ICustomerUpdateService, CustomerUpdateService>();
+        services.AddScoped<ICustomerUpdateService, CustomerUpdateService>();
         return services;
     }
 }

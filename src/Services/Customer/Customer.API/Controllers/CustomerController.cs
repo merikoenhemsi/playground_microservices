@@ -12,12 +12,12 @@ namespace Customer.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IAsyncRepository<Entities.Customer> _customerRepository;
         private readonly ILogger<CustomerController> _logger;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger, IMapper mapper,
+        public CustomerController(IAsyncRepository<Entities.Customer> customerRepository, ILogger<CustomerController> logger, IMapper mapper,
             IPublishEndpoint publishEndpoint)
         {
             _customerRepository = customerRepository;
@@ -31,7 +31,7 @@ namespace Customer.API.Controllers
         [ProducesResponseType(typeof(IReadOnlyList<Entities.Customer>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IReadOnlyList<Entities.Customer>>> CustomersAsync()
         {
-            var customers = await _customerRepository.GetCustomersAsync();
+            var customers = await _customerRepository.GetAllAsync();
             return Ok(customers);
         }
 
@@ -47,7 +47,7 @@ namespace Customer.API.Controllers
                 return BadRequest();
             }
 
-            var customer = await _customerRepository.GetCustomerAsync(id);
+            var customer = await _customerRepository.GetByIdAsync(id);
 
             if (customer == null)
             {
@@ -65,7 +65,7 @@ namespace Customer.API.Controllers
         {
             try
             {
-                var customer = await _customerRepository.CreateCustomerAsync(_mapper.Map<Entities.Customer>(customerModel));
+                var customer = await _customerRepository.AddAsync(_mapper.Map<Entities.Customer>(customerModel));
                 return CreatedAtRoute("CustomerById", new { id = customer.Id }, customer);
             }
             catch (Exception ex)
@@ -77,22 +77,26 @@ namespace Customer.API.Controllers
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<bool>> UpdateCustomerAsync([FromBody] UpdateCustomerModel updateCustomerModel)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult> UpdateCustomerAsync([FromBody] UpdateCustomerModel updateCustomerModel)
         {
             try
             {
-                var customer = await _customerRepository.GetCustomerAsync(updateCustomerModel.Id);
+                var customer = await _customerRepository.GetByIdAsync(updateCustomerModel.Id);
                 if (customer == null)
                 {
                     _logger.LogError($"Customer not found.");
                     return NotFound();
                 }
 
-                var updatedCustomer =
-                    await _customerRepository.UpdateCustomerAsync(_mapper.Map(updateCustomerModel, customer));
-                await _publishEndpoint.Publish(_mapper.Map<UpdateCustomerEvent>(customer));
-                return Ok(updatedCustomer);
+                await _customerRepository.UpdateAsync(_mapper.Map(updateCustomerModel, customer));
+                if (customer.FirstName != updateCustomerModel.FirstName ||
+                    customer.LastName != updateCustomerModel.LastName)
+                {
+                    await _publishEndpoint.Publish(_mapper.Map<UpdateCustomerEvent>(customer));
+                }
+
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -105,7 +109,8 @@ namespace Customer.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> DeleteCustomerByIdAsync(int id)
         {
-            await _customerRepository.DeleteCustomerAsync(id);
+            var customer = await _customerRepository.GetByIdAsync(id);
+            await _customerRepository.DeleteAsync(customer);
             return NoContent();
         }
 

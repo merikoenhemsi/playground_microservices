@@ -1,12 +1,19 @@
 using Customer.API;
+using Customer.API.Data;
+using Customer.API.Extensions;
 using Customer.API.Repositories;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+builder.Services.AddDbContext<CustomerContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CustomerConnectionString")));
+
+builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
 
 var eventBusSettings = new EventBusSettings();
 builder.Configuration.Bind(nameof(EventBusSettings), eventBusSettings);
@@ -33,6 +40,13 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+app.MigrateDatabase<CustomerContext>((context, services) =>
+{
+    CustomerContextSeed
+        .SeedAsync(context)
+        .Wait();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

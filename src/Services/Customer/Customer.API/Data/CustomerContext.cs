@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
+using Customer.API.Entities;
 using Microsoft.EntityFrameworkCore;
-using Ordering.Core.Entities;
 
-namespace Ordering.Infrastructure.Data;
+namespace Customer.API.Data;
 
-public class OrderContext : DbContext
+public class CustomerContext : DbContext
 {
     public const string DEFAULT_SCHEMA = "dbo";
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
-    public OrderContext(DbContextOptions<OrderContext> options) : base(options)
+    public DbSet<Entities.Customer> Customers { get; set; }
+    public CustomerContext(DbContextOptions<CustomerContext> options) : base(options)
     {
     }
 

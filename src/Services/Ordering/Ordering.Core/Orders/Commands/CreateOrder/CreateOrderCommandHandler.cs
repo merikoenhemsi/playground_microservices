@@ -18,7 +18,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
     public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var entity = new Order(request.CustomerId,request.CustomerName,request.OrderItems);
-        var order= await _repository.AddAsync(entity);
+        var order= await _repository.AddAsync(entity,cancellationToken);
 
         _logger.LogInformation($"Order is created.");
         return order.Id;

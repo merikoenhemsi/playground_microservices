@@ -18,13 +18,13 @@ public class CustomerUpdateService:ICustomerUpdateService
         _logger = logger;
     }
 
-    public async void UpdateCustomerNameInOrders(UpdateCustomerModel request)
+    public async Task UpdateCustomerNameInOrders(UpdateCustomerModel request)
     {
         try
         {
             var orders = await _mediator.Send(new GetOrdersByCustomerIdQuery()
             {
-                CustomerId = request.Id
+                CustomerId =123456//TODO request.Id
             });
 
             if (orders.Count != 0)
@@ -32,11 +32,15 @@ public class CustomerUpdateService:ICustomerUpdateService
                 orders.ForEach(x => x.CustomerName = $"{request.FirstName} {request.LastName}");
             }
 
-            orders.ForEach(async o => await _mediator.Send(new UpdateOrderCommand() { Order = o }));
+            foreach (var o in orders)
+            {
+                 await  _mediator.Send(new UpdateOrderCommand() { Order = o });
+            }
+
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception: }", nameof(CustomerUpdateService));
+            _logger.LogError(ex, "An Exception occurred:");
         }
     }
 }
