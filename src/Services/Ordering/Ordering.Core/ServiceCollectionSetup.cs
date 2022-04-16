@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Core.Behaviors;
+using Ordering.Core.Interfaces;
+using Ordering.Core.Orders.Services;
 using System.Reflection;
 
 namespace Ordering.Core;
@@ -13,6 +15,7 @@ public static class ServiceCollectionSetup
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient<ICustomerUpdateService, CustomerUpdateService>();
         return services;
     }
 }

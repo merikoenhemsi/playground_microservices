@@ -15,6 +15,6 @@ public class GetOrdersByDateQueryHandler : IRequestHandler<GetOrdersByDateQuery,
     }
     public async Task<List<Order>> Handle(GetOrdersByDateQuery request, CancellationToken cancellationToken)
     {
-       return await _orderRepository.ListAsync(new OrdersByDateSpec(request.StartDate, request.EndDate));
+       return await _orderRepository.ListAsync(new OrdersByDateSpec(request.StartDate, request.EndDate),cancellationToken);
     }
 }

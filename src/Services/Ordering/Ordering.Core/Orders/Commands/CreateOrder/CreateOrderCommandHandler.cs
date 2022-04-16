@@ -13,7 +13,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
     public CreateOrderCommandHandler(IAsyncRepository<Order> repository, ILogger<CreateOrderCommandHandler> logger)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); ;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); 
     }
     public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {

@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using MediatR;
+﻿using MediatR;
 using Ordering.Core.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ordering.Core.Orders.Commands.CreateOrder;
 

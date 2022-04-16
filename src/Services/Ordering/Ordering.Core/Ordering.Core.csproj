@@ -10,6 +10,10 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Enums\" />
     <Folder Include="Orders\Commands\CancelOrder\" />
+    <Folder Include="Orders\Commands\UpdateOrder\" />
+    <Folder Include="Orders\Models\" />
+    <Folder Include="Orders\Services\" />
+    <Folder Include="Orders\Queries\GetOrdersByCustomerId\" />
     <Folder Include="Specification\" />
   </ItemGroup>
 

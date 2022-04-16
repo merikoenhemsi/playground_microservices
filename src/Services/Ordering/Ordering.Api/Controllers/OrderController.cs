@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ordering.Core.Entities;
 using Ordering.Core.Orders.Commands.CancelOrder;
 using Ordering.Core.Orders.Commands.CreateOrder;
+using Ordering.Core.Orders.Queries.GetOrdersByCustomerId;
 using Ordering.Core.Orders.Queries.GetOrdersByDate;
 
 namespace Ordering.Api.Controllers;
@@ -32,6 +33,24 @@ public class OrderController : ControllerBase
             return Ok(orders);
         }
         catch 
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet]
+    [Route("{customerId:int}")]
+    [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    public async Task<ActionResult<IEnumerable<Order>>> OrdersByCustomerAsync(int customerId)
+    {
+        try
+        {
+            var query = new GetOrdersByCustomerIdQuery(){CustomerId = customerId};
+            var orders = await _mediator.Send(query);
+            return Ok(orders);
+        }
+        catch
         {
             return NotFound();
         }
