@@ -27,7 +27,6 @@ namespace Customer.API.Controllers
         }
 
         [HttpGet]
-        [Route("items")]
         [ProducesResponseType(typeof(IReadOnlyList<Entities.Customer>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IReadOnlyList<Entities.Customer>>> CustomersAsync()
         {
@@ -36,7 +35,7 @@ namespace Customer.API.Controllers
         }
 
         [HttpGet]
-        [Route("items/{id:int}", Name = "CustomerById")]
+        [Route("{id:int}", Name = "CustomerById")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Entities.Customer), (int)HttpStatusCode.OK)]
@@ -82,20 +81,25 @@ namespace Customer.API.Controllers
         {
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(updateCustomerModel.Id);
+                API.Entities.Customer customer = await _customerRepository.GetByIdAsync(updateCustomerModel.Id);
                 if (customer == null)
                 {
                     _logger.LogError($"Customer not found.");
                     return NotFound();
                 }
 
-                await _customerRepository.UpdateAsync(_mapper.Map(updateCustomerModel, customer));
                 if (customer.FirstName != updateCustomerModel.FirstName ||
                     customer.LastName != updateCustomerModel.LastName)
                 {
-                    await _publishEndpoint.Publish(_mapper.Map<UpdateCustomerEvent>(customer));
+                    await _customerRepository.UpdateAsync(_mapper.Map(updateCustomerModel, customer));
+                    var publishedEvent = _mapper.Map<UpdateCustomerEvent>(customer);
+                    await _publishEndpoint.Publish(publishedEvent);
                 }
-
+                else
+                {
+                    await _customerRepository.UpdateAsync(_mapper.Map(updateCustomerModel, customer));
+                }
+                
                 return Ok();
             }
             catch (Exception ex)

@@ -1,0 +1,32 @@
+@startuml "orderapi classes"
+
+abstract class BaseEntity
+{
+    Id :int
+    CreatedDate :DateTime
+    ModifiedDate :DateTime?
+}
+
+class Order
+{
+    CustomerId :int?
+    CustomerName: string
+    OrderItems :List<OrderItem>
+    void SetCancelledStatus()
+}
+
+class OrderItem
+{
+    MasterId :int
+    ProductName :string
+    Price :decimal
+    Count :int
+    ProductId :int
+}
+
+BaseEntity <|-- Order
+BaseEntity <|-- OrderItem
+
+Order "1" *-- "n" OrderItem
+
+@enduml

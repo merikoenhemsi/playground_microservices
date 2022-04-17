@@ -1,11 +1,13 @@
-﻿using System.Net;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Ordering.Api.Models;
 using Ordering.Core.Entities;
 using Ordering.Core.Orders.Commands.CancelOrder;
-using Ordering.Core.Orders.Commands.CreateOrder;
 using Ordering.Core.Orders.Queries.GetOrdersByCustomerId;
 using Ordering.Core.Orders.Queries.GetOrdersByDate;
+using System.Net;
+using Ordering.Core.Orders.Commands.CreateOrder;
 
 namespace Ordering.Api.Controllers;
 
@@ -14,10 +16,12 @@ namespace Ordering.Api.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public OrderController(IMediator mediator)
+    public OrderController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper)); ;
     }
 
     [HttpGet]
@@ -83,8 +87,9 @@ public class OrderController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> CreateOrderAsync([FromBody] CreateOrderCommand command)
+    public async Task<ActionResult<int>> CreateOrderAsync([FromBody] CreateOrderModel model)
     {
+        var command = _mapper.Map<CreateOrderCommand>(model);
         var result = await _mediator.Send(command);
         return Ok(result);
     }

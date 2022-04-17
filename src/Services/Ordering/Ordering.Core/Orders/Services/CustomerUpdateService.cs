@@ -24,7 +24,7 @@ public class CustomerUpdateService:ICustomerUpdateService
         {
             var orders = await _mediator.Send(new GetOrdersByCustomerIdQuery()
             {
-                CustomerId =123456//TODO request.Id
+                CustomerId =request.CustomerId
             });
 
             if (orders.Count != 0)

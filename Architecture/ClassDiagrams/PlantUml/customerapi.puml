@@ -1,0 +1,23 @@
+@startuml "customerapi classes"
+
+abstract class BaseEntity
+{
+    Id :int
+    CreatedDate :DateTime
+    ModifiedDate :DateTime?
+}
+
+class Customer
+{
+    FirstName: string
+    LastName :string
+    Email :string
+    Address :string
+    Gender :string
+}
+
+
+
+BaseEntity <|-- Customer
+
+@enduml

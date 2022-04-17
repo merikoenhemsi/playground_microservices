@@ -37,6 +37,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Messages", "Buildi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customer.Tests", "Services\Customer\Customer.Tests\Customer.Tests.csproj", "{20672595-79C1-4498-A393-7B7D7B9A0AD8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Png", "Png", "{7E0E9007-A944-4568-9638-856441D07164}"
+	ProjectSection(SolutionItems) = preProject
+		..\Architecture\ClassDiagrams\Png\Customer.PNG = ..\Architecture\ClassDiagrams\Png\Customer.PNG
+		..\Architecture\ClassDiagrams\Png\Order.PNG = ..\Architecture\ClassDiagrams\Png\Order.PNG
+		..\Architecture\ClassDiagrams\Png\Product.PNG = ..\Architecture\ClassDiagrams\Png\Product.PNG
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlantUml", "PlantUml", "{CD449C6F-DF9E-4C56-B6F3-965348C0A006}"
+	ProjectSection(SolutionItems) = preProject
+		..\Architecture\ClassDiagrams\customerapi.puml = ..\Architecture\ClassDiagrams\customerapi.puml
+		..\Architecture\ClassDiagrams\orderapi.puml = ..\Architecture\ClassDiagrams\orderapi.puml
+		..\Architecture\ClassDiagrams\productapi.puml = ..\Architecture\ClassDiagrams\productapi.puml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +115,8 @@ Global
 		{5088E23B-7574-4585-9186-45BA5B626D07} = {F4413772-DD38-428B-8CA3-78D8E158D2EE}
 		{D12ED0DC-27CC-4351-BF49-32F3C6D6217D} = {9A27EA18-56CD-40B5-A3AB-D7FCF0FBCEEB}
 		{20672595-79C1-4498-A393-7B7D7B9A0AD8} = {F4413772-DD38-428B-8CA3-78D8E158D2EE}
+		{7E0E9007-A944-4568-9638-856441D07164} = {682EE3AF-898D-45DC-AC55-F3B668FC256A}
+		{CD449C6F-DF9E-4C56-B6F3-965348C0A006} = {682EE3AF-898D-45DC-AC55-F3B668FC256A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {035AD543-5503-4D5A-BE70-1E8A27800C68}

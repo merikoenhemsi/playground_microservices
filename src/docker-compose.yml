@@ -1,8 +1,11 @@
 version: '3.4'
 
 services:
-  orderdb:
+  sqldata:
     image: mcr.microsoft.com/mssql/server:2017-latest
+
+  portainer:
+    image: portainer/portainer-ce
   
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -24,4 +27,7 @@ services:
     build:
       context: .
       dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+
+volumes:
+  portainer_data:
 

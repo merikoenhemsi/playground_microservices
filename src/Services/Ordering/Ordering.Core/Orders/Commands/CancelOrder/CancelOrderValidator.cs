@@ -6,7 +6,6 @@ public class CancelOrderValidator:AbstractValidator<CancelOrderCommand>
 {
     public CancelOrderValidator()
     {
-        //TODO
         RuleFor(command => command.Id)
             .NotEmpty().WithMessage("{Id} is required.");
 
