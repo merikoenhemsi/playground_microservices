@@ -6,7 +6,13 @@
 * ASP.NET Core Web API application 
 * REST API principles, CRUD operations
 * Repository Pattern Implementation (but no db, no unit test)
-* Swagger Open API implementation	
+* Swagger Open API implementation
+
+#### Customer microservice which includes; 
+* ASP.NET Core Web API application 
+* REST API principles, CRUD operations
+* Repository Pattern Implementation (but no db, no unit test)
+* Swagger Open API implementation
 
 #### Ordering Microservice
 * Implementing **DDD, CQRS, and Clean Architecture** with using Best Practices
@@ -40,6 +46,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 5. You can **launch microservices** as below urls:
 
 * **Product API -> http://host.docker.internal:8000/swagger/index.html**
+* **Customer API -> http://host.docker.internal:8001/swagger/index.html**
 * **Ordering API -> http://host.docker.internal:8004/swagger/index.html**
 
 
