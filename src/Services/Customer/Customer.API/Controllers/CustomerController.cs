@@ -1,10 +1,10 @@
 using AutoMapper;
-using Customer.API.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using Customer.API.Models;
+using Customer.API.Repositories;
 using EventBus.Messages.Events;
 using MassTransit;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Customer.API.Controllers
 {

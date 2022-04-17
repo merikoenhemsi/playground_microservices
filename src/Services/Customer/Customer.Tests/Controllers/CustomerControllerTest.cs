@@ -61,7 +61,6 @@ public class CustomerControllerTest
        
         actionResult.Should().NotBeNull();
         actionResult.Result.Should().BeOfType<OkObjectResult>();
-        var result = actionResult.Result as OkObjectResult;
         var customers = actionResult.GetObjectResult();
         customers.Should().BeOfType<List<API.Entities.Customer>>();
         customers.Count.Should().Be(2);
@@ -118,7 +117,7 @@ public class CustomerControllerTest
     }
 
     [Fact]
-    public async void Put_ShouldReturnOk()
+    public async void Put_ShouldReturnOkWithPublish()
     {
         var (controller, repository, _, _, publishEndPoint) = Factory();
         repository.Setup(rp => rp.GetByIdAsync(It.IsAny<int>()))!.ReturnsAsync(Customers.FirstOrDefault());
@@ -126,10 +125,26 @@ public class CustomerControllerTest
         publishEndPoint.Setup(p=>p.Publish(It.IsAny<UpdateCustomerEvent>(),It.IsAny<CancellationToken>())).Returns(Task.FromResult(default(UpdateCustomerEvent)));   
         var actionResult = await controller.UpdateCustomerAsync(new UpdateCustomerModel());
 
-        //actionResult.Should().NotBeNull(); TODO
-        //actionResult.Result.Should().BeOfType<OkObjectResult>();
-        //var customer = actionResult.GetObjectResult();
-        //customer.Should().Be(true);
+        actionResult.Should().NotBeNull(); 
+        actionResult.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public async void Put_ShouldReturnOkWithNoPublish()
+    {
+        var customer = Customers.FirstOrDefault();
+        var (controller, repository, _, _, publishEndPoint) = Factory();
+        repository.Setup(rp => rp.GetByIdAsync(It.IsAny<int>()))!.ReturnsAsync(customer);
+        repository.Setup(rp => rp.UpdateAsync(It.IsAny<API.Entities.Customer>()))!.Returns(Task.FromResult(true));
+        var actionResult = await controller.UpdateCustomerAsync(new UpdateCustomerModel
+            {
+                FirstName = customer.FirstName,
+                LastName = customer.LastName
+            }
+        );
+
+        actionResult.Should().NotBeNull();
+        actionResult.Should().BeOfType<OkResult>();
     }
 
     [Fact]
@@ -139,8 +154,8 @@ public class CustomerControllerTest
         repository.Setup(rp => rp.GetByIdAsync(It.IsAny<int>())).Throws(new Exception("Boom"));
         var actionResult = await controller.UpdateCustomerAsync(new UpdateCustomerModel());
 
-        //actionResult.Should().NotBeNull(); TODO
-        //actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+        actionResult.Should().NotBeNull(); 
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]

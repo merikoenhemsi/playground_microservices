@@ -31,7 +31,8 @@ namespace Customer.Tests.Mapper
         public void Map_Customer_Customer_ShouldHaveValidConfig()
         {
             var configuration = new MapperConfiguration(cfg =>
-                cfg.CreateMap<API.Entities.Customer, UpdateCustomerEvent>());
+                cfg.CreateMap<API.Entities.Customer, UpdateCustomerEvent>().ForMember(evt => evt.CustomerId,
+                opt => opt.MapFrom(c => c.Id)));
 
             configuration.AssertConfigurationIsValid();
         }

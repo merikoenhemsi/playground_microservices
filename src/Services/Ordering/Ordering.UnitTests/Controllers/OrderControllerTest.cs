@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -7,6 +8,9 @@ using Ordering.Api.Models;
 using Ordering.Core.Entities;
 using Ordering.Core.Orders.Commands.CancelOrder;
 using Ordering.Core.Orders.Commands.CreateOrder;
+using Ordering.Core.Orders.Queries.GetOrdersByCustomerId;
+using Ordering.Core.Orders.Queries.GetOrdersByDate;
+using Ordering.UnitTests.Extensions;
 using Xunit;
 
 namespace Ordering.UnitTests.Controllers
@@ -74,6 +78,38 @@ namespace Ordering.UnitTests.Controllers
             //Assert
             Assert.Equal((actionResult.Result as OkObjectResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
 
+        }
+
+        [Fact]
+        public async void GetByDate_ShouldReturnOrders()
+        {
+            _mediatorMock.Setup(x => x.Send(It.IsAny<GetOrdersByDateQuery>(), default))
+                .ReturnsAsync(new List<Order>()
+                );
+
+            var orderController = new OrderController(_mediatorMock.Object, _mapper.Object);
+            var actionResult = await orderController.OrdersByDateAsync(DateTime.Now.AddDays(-1),DateTime.Now );
+
+            actionResult.Should().NotBeNull();
+            actionResult.Result.Should().BeOfType<OkObjectResult>();
+            var order = actionResult.GetObjectResult();
+            order.Should().BeOfType<List<Order>>();
+        }
+
+        [Fact]
+        public async void GetByCustomer_ShouldReturnOrders()
+        {
+            _mediatorMock.Setup(x => x.Send(It.IsAny<GetOrdersByCustomerIdQuery>(), default))
+                .ReturnsAsync(new List<Order>()
+                );
+
+            var orderController = new OrderController(_mediatorMock.Object, _mapper.Object);
+            var actionResult = await orderController.OrdersByCustomerAsync(_id);
+
+            actionResult.Should().NotBeNull();
+            actionResult.Result.Should().BeOfType<OkObjectResult>();
+            var order = actionResult.GetObjectResult();
+            order.Should().BeOfType<List<Order>>();
         }
 
     }

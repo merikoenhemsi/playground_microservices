@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Ordering.Api\Ordering.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

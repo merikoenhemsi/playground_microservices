@@ -31,6 +31,9 @@ services:
     container_name: product.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:ProductConnectionString=Server=sqldata;Database=ProductDb;User Id=sa;Password=SwN12345678" 
+    depends_on:
+        - sqldata
     ports:
       - "8000:80"
 

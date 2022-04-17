@@ -28,10 +28,14 @@ public class OrderController : ControllerBase
     [Route("betweenDates")]
     [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<ActionResult<IEnumerable<Order>>> OrdersByDateAsync(DateTime startDate, DateTime endDate)
     {
         try
         {
+            if (startDate > endDate)
+                return BadRequest();
+
             var query = new GetOrdersByDateQuery(startDate, endDate);
             var orders = await _mediator.Send(query);
             return Ok(orders);
