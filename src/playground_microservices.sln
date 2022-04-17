@@ -46,9 +46,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Png", "Png", "{7E0E9007-A94
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlantUml", "PlantUml", "{CD449C6F-DF9E-4C56-B6F3-965348C0A006}"
 	ProjectSection(SolutionItems) = preProject
-		..\Architecture\ClassDiagrams\customerapi.puml = ..\Architecture\ClassDiagrams\customerapi.puml
-		..\Architecture\ClassDiagrams\orderapi.puml = ..\Architecture\ClassDiagrams\orderapi.puml
-		..\Architecture\ClassDiagrams\productapi.puml = ..\Architecture\ClassDiagrams\productapi.puml
+		..\Architecture\ClassDiagrams\PlantUml\customerapi.puml = ..\Architecture\ClassDiagrams\PlantUml\customerapi.puml
+		..\Architecture\ClassDiagrams\PlantUml\orderapi.puml = ..\Architecture\ClassDiagrams\PlantUml\orderapi.puml
+		..\Architecture\ClassDiagrams\PlantUml\productapi.puml = ..\Architecture\ClassDiagrams\PlantUml\productapi.puml
 	EndProjectSection
 EndProject
 Global
