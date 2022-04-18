@@ -1,25 +1,33 @@
 # playground_microservices
 
+### Code Coverage: %28
+
 ## Whats Including In This Repository
 
 #### Product microservice which includes; 
 * ASP.NET Core Web API application 
 * REST API principles, CRUD operations
-* Repository Pattern Implementation (but no db, no unit test)
-* Swagger Open API implementation
+* Repository Pattern Implementation 
+* SqlServer database connection and containerization
 
 #### Customer microservice which includes; 
 * ASP.NET Core Web API application 
 * REST API principles, CRUD operations
-* Repository Pattern Implementation (but no db, no unit test)
-* Swagger Open API implementation
+* Repository Pattern Implementation 
+* SqlServer database connection and containerization
 
 #### Ordering Microservice
 * Implementing **DDD, CQRS, and Clean Architecture** with using Best Practices
 * Developing **CQRS with using MediatR, FluentValidation and AutoMapper packages**
-* **SqlServer database** connection and containerization
+* SqlServer database connection and containerization
 * Using **Entity Framework Core ORM** and auto migrate to SqlServer when application startup
-* (no unit test)
+
+#### Microservices Communication
+* Async Microservices Communication with RabbitMQ Message-Broker Service
+* Using RabbitMQ Publish/Subscribe Topic Exchange Model
+* Using MassTransit for abstraction over RabbitMQ Message-Broker system
+* Publishing UpdateCustomer event queue from Customer microservices and Subscribing this event from Ordering microservices
+* Create RabbitMQ EventBus.Messages library and add references Microservices
 	
 ## Run The Project
 You will need the following tools:
@@ -48,6 +56,10 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 * **Product API -> http://host.docker.internal:8000/swagger/index.html**
 * **Customer API -> http://host.docker.internal:8001/swagger/index.html**
 * **Ordering API -> http://host.docker.internal:8004/swagger/index.html**
+* Rabbit Management Dashboard -> http://host.docker.internal:15672 -- guest/guest
+* Portainer -> http://host.docker.internal:9000 -- admin/portainer
+
+
 
 
 
